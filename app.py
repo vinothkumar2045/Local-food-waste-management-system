@@ -75,6 +75,7 @@ page = st.sidebar.radio("Go to", [
     "CRUD Operations",
     "SQL Queries & Visualization",
     "Learner SQL Queries",
+    "Data Filtering",
     "User Introduction"
 ])
 
@@ -418,6 +419,36 @@ elif page == "Learner SQL Queries":
     if st.button("Run Query"):
         result = qid()
         st.dataframe(result)
+        
+elif page == "Data Filtering":
+    st.title("🔍 Simple Data Filtering")
+
+    table_option = st.selectbox("Select a table", ["Providers", "Receivers", "Food Listings"])
+
+    if table_option == "Providers":
+        st.subheader("Filter Providers by City or Type")
+        city = st.selectbox("Select City", sorted(providers_df["City"].unique()))
+        type_ = st.selectbox("Select Type", sorted(providers_df["Type"].unique()))
+        
+        filtered_df = providers_df[(providers_df["City"] == city) & (providers_df["Type"] == type_)]
+        st.dataframe(filtered_df)
+
+    elif table_option == "Receivers":
+        st.subheader("Filter Receivers by City")
+        city = st.selectbox("Select City", sorted(receivers_df["City"].unique()))
+        
+        filtered_df = receivers_df[receivers_df["City"] == city]
+        st.dataframe(filtered_df)
+
+    elif table_option == "Food Listings":
+        st.subheader("Filter Food Listings by Location and Food Type")
+        location = st.selectbox("Select Location", sorted(food_listings_df["Location"].dropna().astype(str).unique()))
+
+        food_type = st.selectbox("Select Food Type", sorted(food_listings_df["Food_Type"].unique()))
+        
+        filtered_df = food_listings_df[(food_listings_df["Location"] == location) & (food_listings_df["Food_Type"] == food_type)]
+        st.dataframe(filtered_df)
+
         
 elif page == "User Introduction":
     st.title("👤 User Introduction")
